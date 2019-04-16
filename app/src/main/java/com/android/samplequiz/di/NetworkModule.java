@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetworkModule {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    private static final String BASE_URL = "34.73.190.231:8080";
+    private static final String BASE_URL = "http://34.73.190.231:8080/";
 
     @Provides
     @Singleton
