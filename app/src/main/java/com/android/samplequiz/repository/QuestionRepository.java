@@ -4,6 +4,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.android.samplequiz.model.AnswerResponse;
+import com.android.samplequiz.model.AnswerRequest;
 import com.android.samplequiz.model.DataWrapper;
 import com.android.samplequiz.model.Question;
 import com.android.samplequiz.service.QuizService;
@@ -14,17 +16,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.android.samplequiz.service.QuizService.INTERNAL_ERROR;
+
 public class QuestionRepository {
 
     private static final String TAG = "QuestionRepo";
-    public static final int INTERNAL_ERROR = 500;
     private QuizService service;
     private MutableLiveData<DataWrapper<Question>> questionMutableLiveData;
+    private MutableLiveData<Boolean> answerMutableLiveData;
 
     @Inject
     public QuestionRepository(QuizService service) {
         this.service = service;
         this.questionMutableLiveData = new MutableLiveData<>();
+        this.answerMutableLiveData = new MutableLiveData<>();
     }
 
     public MutableLiveData<DataWrapper<Question>> loadQuestion() {
@@ -59,5 +64,26 @@ public class QuestionRepository {
             }
         });
         return questionMutableLiveData;
+    }
+
+    public MutableLiveData<Boolean> getAnswer(String answer, int questionId) {
+        AnswerRequest request = new AnswerRequest(answer);
+
+        Call<AnswerResponse> call = service.getAnswer(request, questionId);
+
+        call.enqueue(new Callback<AnswerResponse>() {
+            @Override
+            public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
+                if (response.body() != null) {
+                    answerMutableLiveData.setValue(response.body().isResult());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AnswerResponse> call, Throwable t) {
+
+            }
+        });
+        return answerMutableLiveData;
     }
 }

@@ -23,4 +23,8 @@ public class QuestionViewModel extends ViewModel {
     public MutableLiveData<DataWrapper<Question>> loadQuestion(){
         return repository.loadQuestion();
     }
+
+    public MutableLiveData<Boolean> getAnswer(String answer, int questionId) {
+        return repository.getAnswer(answer, questionId);
+    }
 }
