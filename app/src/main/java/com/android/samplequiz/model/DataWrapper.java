@@ -26,4 +26,12 @@ public class DataWrapper<T> {
     public void setCode(int code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return "DataWrapper{" +
+                "data=" + data +
+                ", code=" + code +
+                '}';
+    }
 }
