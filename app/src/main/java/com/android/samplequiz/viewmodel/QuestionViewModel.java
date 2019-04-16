@@ -11,7 +11,7 @@ import javax.inject.Inject;
 
 public class QuestionViewModel extends ViewModel {
 
-    private int questionCorrect;
+    private int correctPoints;
     private QuestionRepository repository;
 
     @Inject
@@ -20,11 +20,23 @@ public class QuestionViewModel extends ViewModel {
     }
 
 
-    public MutableLiveData<DataWrapper<Question>> loadQuestion(){
-        return repository.loadQuestion();
+    public MutableLiveData<DataWrapper<Question>> getQuestionLiveData(){
+        return repository.getQuestionMutableLiveData();
+    }
+
+    public void loadQuestion(){
+        repository.loadQuestion();
     }
 
     public MutableLiveData<Boolean> getAnswer(String answer, int questionId) {
         return repository.getAnswer(answer, questionId);
+    }
+
+    public void increaseCorrectPoint(){
+        correctPoints ++;
+    }
+
+    public int getCorrectPoints(){
+        return correctPoints;
     }
 }

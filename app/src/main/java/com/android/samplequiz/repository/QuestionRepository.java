@@ -32,7 +32,11 @@ public class QuestionRepository {
         this.answerMutableLiveData = new MutableLiveData<>();
     }
 
-    public MutableLiveData<DataWrapper<Question>> loadQuestion() {
+    public MutableLiveData<DataWrapper<Question>> getQuestionMutableLiveData() {
+        return questionMutableLiveData;
+    }
+
+    public void loadQuestion(){
         Call<Question> call = service.loadQuestion();
 
         call.enqueue(new Callback<Question>() {
@@ -63,7 +67,6 @@ public class QuestionRepository {
                 questionMutableLiveData.setValue(dataWrapper);
             }
         });
-        return questionMutableLiveData;
     }
 
     public MutableLiveData<Boolean> getAnswer(String answer, int questionId) {
