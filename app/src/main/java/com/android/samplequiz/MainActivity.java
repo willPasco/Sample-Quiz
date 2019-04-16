@@ -3,6 +3,7 @@ package com.android.samplequiz;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import static com.android.samplequiz.service.QuizService.REQUEST_OK;
+
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
 
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @AfterViews
-    void afterViews(){
+    void afterViews() {
 
         viewModel = ViewModelProviders.of(this, factory).get(QuestionViewModel.class);
         viewModel.getQuestionLiveData().observe(this, new Observer<DataWrapper<Question>>() {
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable DataWrapper<Question> dataWrapper) {
                 if (dataWrapper != null) {
                     if (dataWrapper.getCode() == REQUEST_OK) {
-                        if(dataWrapper.getData().getOptions() != null) {
+                        if (dataWrapper.getData().getOptions() != null) {
                             showContentState();
                             configView(dataWrapper.getData());
                         }
@@ -93,13 +95,19 @@ public class MainActivity extends AppCompatActivity {
 
         Log.i(TAG, data.toString());
         enableAnswerButton(28);
+
     }
 
+
     private void createRadioButtons(List<String> optionsList) {
-        for(String option : optionsList){
+        for (String option : optionsList) {
             RadioButton radioButton = new RadioButton(this);
             radioButton.setText(option);
             radioButton.setId(option.length());
+            radioButton.setPadding(0, 16, 0, 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                radioButton.setGravity(View.TEXT_ALIGNMENT_CENTER);
+            }
 
             questionRadioGroup.addView(radioButton);
         }
@@ -115,7 +123,10 @@ public class MainActivity extends AppCompatActivity {
                 viewModel.getAnswer("6:20", id).observe(MainActivity.this, new Observer<Boolean>() {
                     @Override
                     public void onChanged(@Nullable Boolean result) {
-                        if(result != null){
+                        if (result != null) {
+
+                            checkAnswer(result);
+
                             enableNextQuestionButton();
                             Log.i(TAG, String.valueOf(result));
                         }
@@ -123,6 +134,18 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void checkAnswer(Boolean result) {
+        int checkedId = questionRadioGroup.getCheckedRadioButtonId();
+        View checkedRadio = questionRadioGroup.findViewById(checkedId);
+
+        if (result) {
+            viewModel.increaseCorrectPoint();
+            checkedRadio.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+        } else {
+            checkedRadio.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
+        }
     }
 
     private void enableNextQuestionButton() {
@@ -138,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void clearRadioGroup() {
         int count = questionRadioGroup.getChildCount();
-        for(int i=0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             questionRadioGroup.removeViewAt(0);
         }
     }
