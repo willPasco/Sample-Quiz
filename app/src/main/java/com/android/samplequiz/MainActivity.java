@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     void afterViews(){
 
         viewModel = ViewModelProviders.of(this, factory).get(QuestionViewModel.class);
-        viewModel.loadQuestion().observe(this, new Observer<DataWrapper<Question>>() {
+        viewModel.getQuestionLiveData().observe(this, new Observer<DataWrapper<Question>>() {
             @Override
             public void onChanged(@Nullable DataWrapper<Question> dataWrapper) {
                 if (dataWrapper != null) {
