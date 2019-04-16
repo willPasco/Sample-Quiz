@@ -11,7 +11,7 @@ import dagger.Provides;
 public class RepositoryModule {
 
     @Provides
-    public QuestionRepository provideQuestionRepository(QuizService service, Question model){
-        return new QuestionRepository(service, model);
+    public QuestionRepository provideQuestionRepository(QuizService service){
+        return new QuestionRepository(service);
     }
 }
