@@ -4,35 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/space_default"
     tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/text_view_initial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_default"
+        android:text="@string/fill_name_to_start"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/font_default"
+        app:layout_constraintBottom_toTopOf="@id/button_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/text_view_question"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:gravity="bottom"
-        app:layout_constraintVertical_weight="2"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/question_radio_group"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Some Question here" />
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <RadioGroup
         android:id="@+id/question_radio_group"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintVertical_weight="8"
-        app:layout_constraintBottom_toTopOf="@id/button_action"
-        app:layout_constraintTop_toBottomOf="@id/text_view_question">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_default"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/text_view_question" />
 
-
-    </RadioGroup>
 
     <Button
         android:id="@+id/button_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="startQuiz"
-        android:text="Start"
+        android:padding="@dimen/space_default"
+        android:text="@string/start"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,10 +68,46 @@
         android:id="@+id/button_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="Answer"
+        android:padding="@dimen/space_default"
+        android:text="@string/answer"
+        android:textColor="@android:color/white"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_default"
+        android:text="@string/generic_error"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/font_default"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/button_error"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="startQuiz"
+        android:padding="@dimen/space_default"
+        android:text="@string/try_again"
+        android:textColor="@android:color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/answer_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
