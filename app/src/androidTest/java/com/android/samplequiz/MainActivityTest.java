@@ -96,4 +96,23 @@ public class MainActivityTest {
         onView(withId(view.getId())).check(matches(not(isEnabled())));
     }
 
+    @Test
+    public void clickNextQuestion() {
+        onView(withId(R.id.edit_text_user_name)).perform(typeText("User test"));
+        closeSoftKeyboard();
+        onView(withId(R.id.button_start)).perform(click());
+        onView(withId(R.id.question_radio_group)).check(matches(isDisplayed()));
+
+        RadioButton view = (RadioButton) activityIntentsTestRule.getActivity().questionRadioGroup.getChildAt(2);
+        view.setChecked(true);
+
+        onView(withId(R.id.button_action)).perform(click());
+        onView(withId(view.getId())).check(matches(not(isEnabled())));
+
+        onView(withId(R.id.button_action)).perform(click());
+
+        view = (RadioButton) activityIntentsTestRule.getActivity().questionRadioGroup.getChildAt(2);
+        onView(withId(view.getId())).check(matches(isEnabled()));
+    }
+
 }
