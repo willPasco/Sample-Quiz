@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Sample quiz</string>
+    <string name="start">Começar</string>
+    <string name="answer">Responder</string>
+    <string name="fill_name_to_start">Digite seu nome ou apelido abaixo e clique em começar!</string>
+    <string name="try_again">Tentar Novamente</string>
+    <string name="generic_error">Tivemos um problema em buscar as inforamções do servidor! \n Por favor, tente novamente!</string>
+    <string name="nest_question">próxima</string>
+    <string name="congrats_text">Esse foi o seu total de acertos!</string>
+    <string name="restart">Reiniciar</string>
+    <string name="result">Resultado</string>
+    <string name="user_empty">Digite um nome ou apelido para poder continuar.</string>
+    <string name="radio_not_selected">Selecione uma opção antes de continuar.</string>
 </resources>
