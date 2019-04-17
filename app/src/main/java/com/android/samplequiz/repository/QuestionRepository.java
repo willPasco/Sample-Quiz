@@ -69,7 +69,7 @@ public class QuestionRepository {
         });
     }
 
-    public MutableLiveData<Boolean> getAnswer(String answer, int questionId) {
+    public void loadAnswer(String answer, int questionId) {
         AnswerRequest request = new AnswerRequest(answer);
 
         Call<AnswerResponse> call = service.getAnswer(request, questionId);
@@ -87,6 +87,9 @@ public class QuestionRepository {
 
             }
         });
+    }
+
+    public MutableLiveData<Boolean> getAnswerLiveData() {
         return answerMutableLiveData;
     }
 }

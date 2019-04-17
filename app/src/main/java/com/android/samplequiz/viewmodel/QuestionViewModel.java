@@ -24,12 +24,16 @@ public class QuestionViewModel extends ViewModel {
         return repository.getQuestionMutableLiveData();
     }
 
+    public MutableLiveData<Boolean> getAnswerLivedata(){
+        return repository.getAnswerLiveData();
+    }
+
     public void loadQuestion(){
         repository.loadQuestion();
     }
 
-    public MutableLiveData<Boolean> getAnswer(String answer, int questionId) {
-        return repository.getAnswer(answer, questionId);
+    public void loadAnswer(String answer, int questionId) {
+        repository.loadAnswer(answer, questionId);
     }
 
     public void increaseCorrectPoint(){
