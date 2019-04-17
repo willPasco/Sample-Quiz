@@ -4,7 +4,7 @@
     <string name="answer">Responder</string>
     <string name="fill_name_to_start">Digite seu nome ou apelido abaixo e clique em começar!</string>
     <string name="try_again">Tentar Novamente</string>
-    <string name="generic_error">Tivemos um problema em buscar as inforamções do servidor! \\n Nos perdoe!</string>
+    <string name="generic_error">Tivemos um problema em buscar as inforamções do servidor! \n Por favor, tente novamente!</string>
     <string name="nest_question">próxima</string>
     <string name="congrats_text">Esse foi o seu total de acertos!</string>
     <string name="restart">Reiniciar</string>
