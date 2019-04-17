@@ -3,9 +3,13 @@ package com.android.samplequiz;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +23,7 @@ import android.widget.Toast;
 
 import com.android.samplequiz.model.DataWrapper;
 import com.android.samplequiz.model.Question;
+import com.android.samplequiz.utils.SimpleIdlingResource;
 import com.android.samplequiz.viewmodel.QuestionViewModel;
 
 import org.androidannotations.annotations.AfterViews;
@@ -75,11 +80,12 @@ public class MainActivity extends AppCompatActivity {
 
     QuestionViewModel viewModel;
     private int questionId;
+    private SimpleIdlingResource idlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getIdlingResource();
         AppApplication.getComponent().inject(this);
     }
 
@@ -110,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     showErrorState();
                     configErrorButton(LOAD_QUESTION, 0);
                 }
+                idlingResource.setIdleState(true);
             }
         });
 
@@ -129,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     showErrorState();
                     configErrorButton(GET_ANSWER, questionId);
                 }
+                idlingResource.setIdleState(true);
             }
         });
     }
@@ -185,11 +193,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (questionRadioGroup.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(MainActivity.this, "Selecione uma opção antes de continuar.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.radio_not_selected), Toast.LENGTH_LONG).show();
                 } else {
                     if (isOnline()) {
                         blockView();
                         String value = getRadioCheckedValue();
+                        idlingResource.setIdleState(false);
                         viewModel.loadAnswer(value, id);
                     } else {
                         Toast.makeText(MainActivity.this, "Não conseguimos conectar, verifique sua conexão com a internet.", Toast.LENGTH_LONG).show();
@@ -202,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadNewQuestion() {
         if (isOnline()) {
+            idlingResource.setIdleState(false);
             viewModel.loadQuestion();
         } else {
             Toast.makeText(MainActivity.this, "Não conseguimos conectar, verifique sua conexão com a internet.", Toast.LENGTH_LONG).show();
@@ -275,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
         String userName = editTextUserName.getText().toString();
 
         if (userName.length() <= 0) {
-            Toast.makeText(this, "Digite um nome ou apelido para poder continuar.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.user_empty), Toast.LENGTH_LONG).show();
         } else {
             editTextUserName.setVisibility(View.GONE);
             view.setVisibility(View.GONE);
@@ -331,19 +341,19 @@ public class MainActivity extends AppCompatActivity {
         questionProgressBar.setVisibility(View.GONE);
     }
 
-    public boolean isOnline() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private boolean isOnline(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
 
-        return false;
+
+    @VisibleForTesting
+    public IdlingResource getIdlingResource(){
+        if(idlingResource == null){
+            idlingResource = new SimpleIdlingResource();
+        }
+        return idlingResource;
     }
 
 }

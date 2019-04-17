@@ -9,4 +9,6 @@
     <string name="congrats_text">Esse foi o seu total de acertos!</string>
     <string name="restart">Reiniciar</string>
     <string name="result">Resultado</string>
+    <string name="user_empty">Digite um nome ou apelido para poder continuar.</string>
+    <string name="radio_not_selected">Selecione uma opção antes de continuar.</string>
 </resources>
