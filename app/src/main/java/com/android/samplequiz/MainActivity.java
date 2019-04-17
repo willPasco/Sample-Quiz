@@ -207,9 +207,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (result) {
             viewModel.increaseCorrectPoint();
-            checkedRadio.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+            checkedRadio.setBackground(getResources().getDrawable(R.drawable.background_correct_answer));
         } else {
-            checkedRadio.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
+            checkedRadio.setBackground(getResources().getDrawable(R.drawable.background_wrong_answer));
         }
     }
 
