@@ -11,4 +11,22 @@ import org.junit.runner.RunWith;
  */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
+    private IdlingResource idlingResource;
+
+    @Rule
+    public IntentsTestRule<MainActivity_> activityIntentsTestRule = new IntentsTestRule<>(MainActivity_.class);
+
+    @Before
+    public void registerIdleResource() {
+        idlingResource = activityIntentsTestRule.getActivity().getIdlingResource();
+        IdlingRegistry.getInstance().register(idlingResource);
+    }
+
+    @After
+    public void unregisterIdlingResource() {
+        if (idlingResource != null) {
+            IdlingRegistry.getInstance().unregister(idlingResource);
+        }
+    }
+
 }
