@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/space_default"
     tools:context=".MainActivity">
 
     <TextView
@@ -21,12 +22,13 @@
     <TextView
         android:id="@+id/text_view_question"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:gravity="bottom"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/question_radio_group"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_weight="2"
         tools:text="Some Question here" />
 
     <ProgressBar
@@ -42,11 +44,10 @@
     <RadioGroup
         android:id="@+id/question_radio_group"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_default"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/button_action"
-        app:layout_constraintTop_toBottomOf="@id/text_view_question"
-        app:layout_constraintVertical_weight="8" />
+        app:layout_constraintTop_toBottomOf="@id/text_view_question" />
 
 
     <Button
@@ -54,7 +55,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="startQuiz"
+        android:padding="@dimen/space_default"
         android:text="@string/start"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,8 +68,9 @@
         android:id="@+id/button_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:padding="@dimen/space_default"
         android:text="@string/answer"
+        android:textColor="@android:color/white"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
@@ -89,7 +93,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="startQuiz"
+        android:padding="@dimen/space_default"
         android:text="@string/try_again"
+        android:textColor="@android:color/white"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
