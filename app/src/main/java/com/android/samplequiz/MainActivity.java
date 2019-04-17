@@ -135,6 +135,97 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+    
+    private void enableAnswerButton(final int id) {
+
+        buttonAction.setText(getString(R.string.answer));
+        loadAnswer(id);
+    }
+
+    private void loadAnswer(final int id) {
+        questionId = id;
+        buttonAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLoadingState();
+                String value = getRadioCheckedValue();
+                viewModel.loadAnswer(value, id);
+            }
+        });
+    }
+
+    private void loadNewQuestion() {
+        viewModel.loadQuestion();
+    }
+
+    private void enableNextQuestionButton() {
+        buttonAction.setText(getString(R.string.nest_question));
+        buttonAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLoadingState();
+                clearRadioGroup();
+                viewModel.loadQuestion();
+            }
+        });
+    }
+
+    private void configView(Question data) {
+
+        questionTextView.setText(data.getStatement());
+        List<String> optionsList = data.getOptions();
+        createRadioButtons(optionsList);
+
+        Log.i(TAG, data.toString());
+        enableAnswerButton(data.getId());
+
+    }
+
+    private void createRadioButtons(List<String> optionsList) {
+        for (int i = 0; i < optionsList.size(); i++) {
+            RadioButton radioButton = new RadioButton(this);
+            radioButton.setText(optionsList.get(i));
+            radioButton.setId(i);
+            radioButton.setPadding(0, 16, 0, 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                radioButton.setGravity(View.TEXT_ALIGNMENT_CENTER);
+            }
+
+            questionRadioGroup.addView(radioButton);
+        }
+    }
+
+    private void checkAnswer(Boolean result) {
+        int checkedId = questionRadioGroup.getCheckedRadioButtonId();
+        View checkedRadio = questionRadioGroup.findViewById(checkedId);
+
+        if (result) {
+            viewModel.increaseCorrectPoint();
+            checkedRadio.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+        } else {
+            checkedRadio.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
+        }
+    }
+
+    private void clearRadioGroup() {
+        questionRadioGroup.clearCheck();
+        int count = questionRadioGroup.getChildCount();
+        for (int i = 0; i < count; i++) {
+            questionRadioGroup.removeViewAt(0);
+        }
+    }
+
+    private String getRadioCheckedValue() {
+        int id = questionRadioGroup.getCheckedRadioButtonId();
+        RadioButton radioButton = questionRadioGroup.findViewById(id);
+        return radioButton.getText().toString();
+    }
+
+    public void startQuiz(View view) {
+        view.setVisibility(View.GONE);
+        showLoadingState();
+        loadNewQuestion();
+    }
 
     private void showLoadingState() {
 
@@ -167,97 +258,6 @@ public class MainActivity extends AppCompatActivity {
         buttonError.setVisibility(View.VISIBLE);
         errorTextView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
-    }
-
-    private void configView(Question data) {
-
-        questionTextView.setText(data.getStatement());
-        List<String> optionsList = data.getOptions();
-        createRadioButtons(optionsList);
-
-        Log.i(TAG, data.toString());
-        enableAnswerButton(data.getId());
-
-    }
-
-    private void createRadioButtons(List<String> optionsList) {
-        for (int i = 0; i < optionsList.size(); i++) {
-            RadioButton radioButton = new RadioButton(this);
-            radioButton.setText(optionsList.get(i));
-            radioButton.setId(i);
-            radioButton.setPadding(0, 16, 0, 0);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                radioButton.setGravity(View.TEXT_ALIGNMENT_CENTER);
-            }
-
-            questionRadioGroup.addView(radioButton);
-        }
-    }
-
-    private void enableAnswerButton(final int id) {
-
-        buttonAction.setText(getString(R.string.answer));
-        loadAnswer(id);
-    }
-
-    private void loadAnswer(final int id) {
-        questionId = id;
-        buttonAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLoadingState();
-                String value = getRadioCheckedValue();
-                viewModel.loadAnswer(value, id);
-            }
-        });
-    }
-
-    private String getRadioCheckedValue() {
-        int id = questionRadioGroup.getCheckedRadioButtonId();
-        RadioButton radioButton = questionRadioGroup.findViewById(id);
-        return radioButton.getText().toString();
-    }
-
-    private void checkAnswer(Boolean result) {
-        int checkedId = questionRadioGroup.getCheckedRadioButtonId();
-        View checkedRadio = questionRadioGroup.findViewById(checkedId);
-
-        if (result) {
-            viewModel.increaseCorrectPoint();
-            checkedRadio.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
-        } else {
-            checkedRadio.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
-        }
-    }
-
-    private void enableNextQuestionButton() {
-        buttonAction.setText(getString(R.string.nest_question));
-        buttonAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLoadingState();
-                clearRadioGroup();
-                viewModel.loadQuestion();
-            }
-        });
-    }
-
-    private void clearRadioGroup() {
-        questionRadioGroup.clearCheck();
-        int count = questionRadioGroup.getChildCount();
-        for (int i = 0; i < count; i++) {
-            questionRadioGroup.removeViewAt(0);
-        }
-    }
-
-    public void startQuiz(View view) {
-        view.setVisibility(View.GONE);
-        showLoadingState();
-        loadNewQuestion();
-    }
-
-    private void loadNewQuestion() {
-        viewModel.loadQuestion();
     }
 
 }
