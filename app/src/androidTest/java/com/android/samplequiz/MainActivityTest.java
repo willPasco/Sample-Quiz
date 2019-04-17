@@ -115,4 +115,20 @@ public class MainActivityTest {
         onView(withId(view.getId())).check(matches(isEnabled()));
     }
 
+    @Test
+    public void happyFlow(){
+
+        onView(withId(R.id.edit_text_user_name)).perform(typeText("User test"));
+        closeSoftKeyboard();
+        onView(withId(R.id.button_start)).perform(click());
+
+        for(int i=0; i<=9;i++) {
+            RadioButton view = (RadioButton) activityIntentsTestRule.getActivity().questionRadioGroup.getChildAt(2);
+            view.setChecked(true);
+            onView(withId(R.id.button_action)).perform(click());
+            onView(withId(R.id.button_action)).perform(click());
+        }
+
+        intended(hasComponent(new ComponentName(getTargetContext(), ResultActivity_.class)));
+    }
 }
