@@ -13,11 +13,24 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/space_default"
         android:text="@string/fill_name_to_start"
+        android:gravity="center"
         android:textColor="@android:color/black"
         android:textSize="@dimen/font_default"
-        app:layout_constraintBottom_toTopOf="@id/button_start"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_text_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/space_default"
+        android:maxLines="1"
+        android:padding="@dimen/space_medium"
+        android:background="@drawable/gray_border"
+        app:layout_constraintTop_toBottomOf="@id/text_view_initial" />
 
     <TextView
         android:id="@+id/text_view_question"

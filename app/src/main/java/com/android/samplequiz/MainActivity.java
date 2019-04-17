@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -39,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Extra
     String userName;
+
+    @ViewById(R.id.edit_text_user_name)
+    EditText editTextUserName;
 
     @ViewById(R.id.button_action)
     Button buttonAction;
@@ -79,6 +83,10 @@ public class MainActivity extends AppCompatActivity {
 
     @AfterViews
     void afterViews() {
+
+        if (userName != null) {
+            editTextUserName.setText(userName);
+        }
 
         viewModel = ViewModelProviders.of(this, factory).get(QuestionViewModel.class);
         viewModel.getQuestionLiveData().observe(this, new Observer<DataWrapper<Question>>() {
@@ -130,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ResultActivity_.intent(MainActivity.this)
                         .correctAnswers(viewModel.getCorrectPoints())
-                        .userName("Will")
+                        .userName(editTextUserName.getText().toString())
                         .start();
                 finish();
             }
@@ -248,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startQuiz(View view) {
+        editTextUserName.setVisibility(View.GONE);
         view.setVisibility(View.GONE);
         showLoadingState();
         loadNewQuestion();
