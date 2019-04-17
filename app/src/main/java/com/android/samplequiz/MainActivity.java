@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.android.samplequiz.model.DataWrapper;
 import com.android.samplequiz.model.Question;
+import com.android.samplequiz.utils.SimpleIdlingResource;
 import com.android.samplequiz.viewmodel.QuestionViewModel;
 
 import org.androidannotations.annotations.AfterViews;
@@ -75,11 +76,12 @@ public class MainActivity extends AppCompatActivity {
 
     QuestionViewModel viewModel;
     private int questionId;
+    private SimpleIdlingResource idlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getIdlingResource();
         AppApplication.getComponent().inject(this);
     }
 
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     showErrorState();
                     configErrorButton(LOAD_QUESTION, 0);
                 }
+                idlingResource.setIdleState(true);
             }
         });
 
@@ -129,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                     showErrorState();
                     configErrorButton(GET_ANSWER, questionId);
                 }
+                idlingResource.setIdleState(true);
             }
         });
     }
@@ -190,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
                     if (isOnline()) {
                         blockView();
                         String value = getRadioCheckedValue();
+                        idlingResource.setIdleState(false);
                         viewModel.loadAnswer(value, id);
                     } else {
                         Toast.makeText(MainActivity.this, "Não conseguimos conectar, verifique sua conexão com a internet.", Toast.LENGTH_LONG).show();
@@ -202,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadNewQuestion() {
         if (isOnline()) {
+            idlingResource.setIdleState(false);
             viewModel.loadQuestion();
         } else {
             Toast.makeText(MainActivity.this, "Não conseguimos conectar, verifique sua conexão com a internet.", Toast.LENGTH_LONG).show();
@@ -343,7 +349,13 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        return false;
+
+    @VisibleForTesting
+    public IdlingResource getIdlingResource(){
+        if(idlingResource == null){
+            idlingResource = new SimpleIdlingResource();
+        }
+        return idlingResource;
     }
 
 }
