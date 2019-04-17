@@ -3,8 +3,6 @@ package com.android.samplequiz;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -57,7 +55,10 @@ public class MainActivity extends AppCompatActivity {
     TextView initTextView;
 
     @ViewById(R.id.progress_bar)
-    ProgressBar progressBar;
+    ProgressBar questionProgressBar;
+
+    @ViewById(R.id.answer_progress_bar)
+    ProgressBar answerProgressBar;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 if (result != null) {
                     checkAnswer(result);
                     enableNextQuestionButton();
+                    unblockView();
                     showContentState();
                 } else {
                     showErrorState();
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void configErrorButton(int typeListener, final int questionId) {
 
@@ -149,12 +152,13 @@ public class MainActivity extends AppCompatActivity {
         buttonAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLoadingState();
+                blockView();
                 String value = getRadioCheckedValue();
                 viewModel.loadAnswer(value, id);
             }
         });
     }
+
 
     private void loadNewQuestion() {
         viewModel.loadQuestion();
@@ -229,6 +233,20 @@ public class MainActivity extends AppCompatActivity {
         loadNewQuestion();
     }
 
+    private void blockView() {
+        int count = questionRadioGroup.getChildCount();
+        for (int i = 0; i < count; i++) {
+            RadioButton radioButton = (RadioButton) questionRadioGroup.getChildAt(i);
+            radioButton.setEnabled(false);
+        }
+        buttonAction.setVisibility(View.GONE);
+        answerProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void unblockView() {
+        answerProgressBar.setVisibility(View.GONE);
+    }
+
     private void showLoadingState() {
 
         questionTextView.setVisibility(View.GONE);
@@ -237,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
         initTextView.setVisibility(View.GONE);
         buttonError.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+        questionProgressBar.setVisibility(View.VISIBLE);
     }
 
     private void showContentState() {
@@ -248,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
         initTextView.setVisibility(View.GONE);
         buttonError.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.GONE);
+        questionProgressBar.setVisibility(View.GONE);
     }
 
     private void showErrorState() {
@@ -259,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
         initTextView.setVisibility(View.GONE);
         buttonError.setVisibility(View.VISIBLE);
         errorTextView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.GONE);
+        questionProgressBar.setVisibility(View.GONE);
     }
 
 }
