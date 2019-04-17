@@ -3,9 +3,13 @@ package com.android.samplequiz;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -189,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (questionRadioGroup.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(MainActivity.this, "Selecione uma opção antes de continuar.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.radio_not_selected), Toast.LENGTH_LONG).show();
                 } else {
                     if (isOnline()) {
                         blockView();
@@ -281,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
         String userName = editTextUserName.getText().toString();
 
         if (userName.length() <= 0) {
-            Toast.makeText(this, "Digite um nome ou apelido para poder continuar.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.user_empty), Toast.LENGTH_LONG).show();
         } else {
             editTextUserName.setVisibility(View.GONE);
             view.setVisibility(View.GONE);
@@ -337,17 +341,11 @@ public class MainActivity extends AppCompatActivity {
         questionProgressBar.setVisibility(View.GONE);
     }
 
-    public boolean isOnline() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private boolean isOnline(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
 
 
     @VisibleForTesting
