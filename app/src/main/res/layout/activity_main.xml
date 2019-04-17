@@ -8,32 +8,6 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/text_view_initial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/space_default"
-        android:text="@string/fill_name_to_start"
-        android:gravity="center"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/font_default"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/edit_text_user_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="@dimen/space_default"
-        android:maxLines="0"
-        android:inputType="textShortMessage"
-        android:padding="@dimen/space_medium"
-        android:background="@drawable/gray_border"
-        app:layout_constraintTop_toBottomOf="@id/text_view_initial" />
-
-    <TextView
         android:id="@+id/text_view_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,21 +38,6 @@
         app:layout_constraintTop_toBottomOf="@id/text_view_question" />
 
     <Button
-        android:id="@+id/button_start"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_default"
-        android:onClick="startQuiz"
-        android:elevation="4dp"
-        android:padding="@dimen/space_default"
-        android:text="@string/start"
-        android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_text_user_name" />
-
-
-    <Button
         android:id="@+id/button_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -89,32 +48,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <TextView
-        android:id="@+id/text_view_error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/space_default"
-        android:text="@string/generic_error"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/font_default"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/button_error"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <include
+        layout="@layout/register_user"/>
 
-    <Button
-        android:id="@+id/button_error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="startQuiz"
-        android:padding="@dimen/space_default"
-        android:text="@string/try_again"
-        android:textColor="@android:color/white"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <include
+        layout="@layout/error_state"
+        tools:visibility="gone"/>
 
     <ProgressBar
         android:id="@+id/answer_progress_bar"

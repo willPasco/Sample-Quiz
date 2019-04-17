@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/text_view_initial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_default"
+            android:gravity="center"
+            android:text="@string/fill_name_to_start"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_default" />
+
+        <EditText
+            android:id="@+id/edit_text_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_default"
+            android:background="@drawable/gray_border"
+            android:gravity="center"
+            android:inputType="textShortMessage"
+            android:maxLines="0"
+            android:padding="@dimen/space_medium" />
+
+        <Button
+            android:id="@+id/button_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_default"
+            android:layout_marginBottom="8dp"
+            android:elevation="4dp"
+            android:onClick="startQuiz"
+            android:padding="@dimen/space_default"
+            android:text="@string/start"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>
