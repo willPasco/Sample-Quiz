@@ -37,7 +37,7 @@ public class ResultActivity extends AppCompatActivity {
     void afterViews(){
 
         textViewResult.setText(String.valueOf(correctAnswers));
-        String congratsText = "Parabéns! "+userName+ " "+getString(R.string.congrats_text);
+        String congratsText = "Parabéns! "+userName+ ", "+getString(R.string.congrats_text);
         textViewCongrats.setText(congratsText);
 
     }
