@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -21,6 +22,7 @@ import com.android.samplequiz.viewmodel.QuestionViewModel;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
@@ -35,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int LOAD_QUESTION = 0;
     private static final int GET_ANSWER = 1;
+
+    @Extra
+    String userName;
+
+    @ViewById(R.id.edit_text_user_name)
+    EditText editTextUserName;
 
     @ViewById(R.id.button_action)
     Button buttonAction;
@@ -76,6 +84,10 @@ public class MainActivity extends AppCompatActivity {
     @AfterViews
     void afterViews() {
 
+        if (userName != null) {
+            editTextUserName.setText(userName);
+        }
+
         viewModel = ViewModelProviders.of(this, factory).get(QuestionViewModel.class);
         viewModel.getQuestionLiveData().observe(this, new Observer<DataWrapper<Question>>() {
             @Override
@@ -104,7 +116,11 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable Boolean result) {
                 if (result != null) {
                     checkAnswer(result);
-                    enableNextQuestionButton();
+                    if (viewModel.getQuestionCount() < 10) {
+                        enableNextQuestionButton();
+                    } else {
+                        enableResultButton();
+                    }
                     unblockView();
                     showContentState();
                 } else {
@@ -115,6 +131,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void enableResultButton() {
+        buttonAction.setText(getString(R.string.result));
+        buttonAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResultActivity_.intent(MainActivity.this)
+                        .correctAnswers(viewModel.getCorrectPoints())
+                        .userName(editTextUserName.getText().toString())
+                        .start();
+                finish();
+            }
+        });
+    }
 
     private void configErrorButton(int typeListener, final int questionId) {
 
@@ -158,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void loadNewQuestion() {
         viewModel.loadQuestion();
@@ -228,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startQuiz(View view) {
+        editTextUserName.setVisibility(View.GONE);
         view.setVisibility(View.GONE);
         showLoadingState();
         loadNewQuestion();
