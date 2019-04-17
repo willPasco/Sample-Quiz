@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.samplequiz.model.DataWrapper;
 import com.android.samplequiz.model.Question;
@@ -25,6 +26,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -181,15 +183,29 @@ public class MainActivity extends AppCompatActivity {
         buttonAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                blockView();
-                String value = getRadioCheckedValue();
-                viewModel.loadAnswer(value, id);
+
+                if (questionRadioGroup.getCheckedRadioButtonId() == -1) {
+                    Toast.makeText(MainActivity.this, "Selecione uma opção antes de continuar.", Toast.LENGTH_LONG).show();
+                } else {
+                    if (isOnline()) {
+                        blockView();
+                        String value = getRadioCheckedValue();
+                        viewModel.loadAnswer(value, id);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Não conseguimos conectar, verifique sua conexão com a internet.", Toast.LENGTH_LONG).show();
+                    }
+
+                }
             }
         });
     }
 
     private void loadNewQuestion() {
-        viewModel.loadQuestion();
+        if (isOnline()) {
+            viewModel.loadQuestion();
+        } else {
+            Toast.makeText(MainActivity.this, "Não conseguimos conectar, verifique sua conexão com a internet.", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void enableNextQuestionButton() {
@@ -199,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showLoadingState();
                 clearRadioGroup();
-                viewModel.loadQuestion();
+                loadNewQuestion();
             }
         });
     }
@@ -256,10 +272,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startQuiz(View view) {
-        editTextUserName.setVisibility(View.GONE);
-        view.setVisibility(View.GONE);
-        showLoadingState();
-        loadNewQuestion();
+        String userName = editTextUserName.getText().toString();
+
+        if (userName.length() <= 0) {
+            Toast.makeText(this, "Digite um nome ou apelido para poder continuar.", Toast.LENGTH_LONG).show();
+        } else {
+            editTextUserName.setVisibility(View.GONE);
+            view.setVisibility(View.GONE);
+            showLoadingState();
+            loadNewQuestion();
+        }
     }
 
     private void blockView() {
@@ -307,6 +329,21 @@ public class MainActivity extends AppCompatActivity {
         buttonError.setVisibility(View.VISIBLE);
         errorTextView.setVisibility(View.VISIBLE);
         questionProgressBar.setVisibility(View.GONE);
+    }
+
+    public boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
 }
