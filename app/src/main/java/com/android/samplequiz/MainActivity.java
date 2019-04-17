@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.samplequiz.model.DataWrapper;
 import com.android.samplequiz.model.Question;
@@ -181,9 +182,15 @@ public class MainActivity extends AppCompatActivity {
         buttonAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                blockView();
-                String value = getRadioCheckedValue();
-                viewModel.loadAnswer(value, id);
+
+                if (questionRadioGroup.getCheckedRadioButtonId() == -1) {
+                    Toast.makeText(MainActivity.this, "Selecione uma opção antes de continuar.", Toast.LENGTH_LONG).show();
+                } else {
+                    blockView();
+                    String value = getRadioCheckedValue();
+                    viewModel.loadAnswer(value, id);
+
+                }
             }
         });
     }
@@ -256,10 +263,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startQuiz(View view) {
-        editTextUserName.setVisibility(View.GONE);
-        view.setVisibility(View.GONE);
-        showLoadingState();
-        loadNewQuestion();
+        String userName = editTextUserName.getText().toString();
+
+        if (userName.length() <= 0) {
+            Toast.makeText(this, "Digite um nome ou apelido para poder continuar.", Toast.LENGTH_LONG).show();
+        } else {
+            editTextUserName.setVisibility(View.GONE);
+            view.setVisibility(View.GONE);
+            showLoadingState();
+            loadNewQuestion();
+        }
     }
 
     private void blockView() {
