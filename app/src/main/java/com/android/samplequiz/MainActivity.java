@@ -21,6 +21,7 @@ import com.android.samplequiz.viewmodel.QuestionViewModel;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int LOAD_QUESTION = 0;
     private static final int GET_ANSWER = 1;
+
+    @Extra
+    String userName;
 
     @ViewById(R.id.button_action)
     Button buttonAction;
@@ -104,7 +108,11 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable Boolean result) {
                 if (result != null) {
                     checkAnswer(result);
-                    enableNextQuestionButton();
+                    if (viewModel.getQuestionCount() < 10) {
+                        enableNextQuestionButton();
+                    } else {
+                        enableResultButton();
+                    }
                     unblockView();
                     showContentState();
                 } else {
@@ -115,6 +123,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void enableResultButton() {
+        buttonAction.setText(getString(R.string.result));
+        buttonAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResultActivity_.intent(MainActivity.this)
+                        .correctAnswers(viewModel.getCorrectPoints())
+                        .userName("Will")
+                        .start();
+                finish();
+            }
+        });
+    }
 
     private void configErrorButton(int typeListener, final int questionId) {
 
@@ -158,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void loadNewQuestion() {
         viewModel.loadQuestion();

@@ -12,6 +12,7 @@ import javax.inject.Inject;
 public class QuestionViewModel extends ViewModel {
 
     private int correctPoints;
+    private int questionCount;
     private QuestionRepository repository;
 
     @Inject
@@ -29,6 +30,7 @@ public class QuestionViewModel extends ViewModel {
     }
 
     public void loadQuestion(){
+        questionCount++;
         repository.loadQuestion();
     }
 
@@ -42,5 +44,9 @@ public class QuestionViewModel extends ViewModel {
 
     public int getCorrectPoints(){
         return correctPoints;
+    }
+
+    public int getQuestionCount() {
+        return questionCount;
     }
 }
