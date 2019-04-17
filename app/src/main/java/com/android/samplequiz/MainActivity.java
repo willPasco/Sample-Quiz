@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 buttonError.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showContentState();
+                        showLoadingState();
                         loadNewQuestion();
                     }
                 });
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 buttonError.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showContentState();
+                        showLoadingState();
                         loadAnswer(questionId);
                     }
                 });
