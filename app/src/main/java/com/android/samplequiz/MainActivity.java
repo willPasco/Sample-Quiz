@@ -3,6 +3,8 @@ package com.android.samplequiz;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-    
+
     private void enableAnswerButton(final int id) {
 
         buttonAction.setText(getString(R.string.answer));
@@ -186,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
             RadioButton radioButton = new RadioButton(this);
             radioButton.setText(optionsList.get(i));
             radioButton.setId(i);
-            radioButton.setPadding(0, 16, 0, 0);
+            radioButton.setPadding(0, 16, 16, 0);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 radioButton.setGravity(View.TEXT_ALIGNMENT_CENTER);
             }
