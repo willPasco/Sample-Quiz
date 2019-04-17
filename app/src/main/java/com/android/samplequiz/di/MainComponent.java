@@ -1,6 +1,7 @@
 package com.android.samplequiz.di;
 
 import com.android.samplequiz.MainActivity;
+import com.android.samplequiz.ResultActivity;
 
 import javax.inject.Singleton;
 
@@ -14,4 +15,6 @@ import dagger.Component;
 public interface MainComponent {
 
     void inject(MainActivity mainActivity);
+
+    void inject(ResultActivity resultActivity);
 }
