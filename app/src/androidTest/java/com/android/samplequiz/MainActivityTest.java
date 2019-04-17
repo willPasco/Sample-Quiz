@@ -29,4 +29,17 @@ public class MainActivityTest {
         }
     }
 
-}
+    @Test
+    public void clickStartQuizButton_WithUserName() {
+        onView(withId(R.id.edit_text_user_name)).perform(typeText("User test"));
+        closeSoftKeyboard();
+        onView(withId(R.id.button_start)).perform(click());
+        onView(withId(R.id.question_radio_group)).check(matches(isDisplayed()));
+    }
+
+
+    @Test
+    public void clickStartQuizButton_WithoutUserName() {
+        onView(withId(R.id.button_start)).perform(click());
+        onView(withText(R.string.user_empty)).inRoot(withDecorView(not(is(activityIntentsTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+    }
